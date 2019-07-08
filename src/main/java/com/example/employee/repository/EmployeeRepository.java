@@ -10,14 +10,16 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     //以下所有的*都代表变量
 
     //1.查询名字是*的第一个employee
-    @Query("SELECT e FROM Employee e WHERE name = ?1")
+    @Query(nativeQuery = true, value = "SELECT e FROM Employee e WHERE name = ?1 LIMIT 1")
     Employee findByName(String name);
 
     //2.找出Employee表中第一个姓名包含`*`字符并且薪资大于*的雇员个人信息
-    @Query("SELECT e FROM Employee e WHERE name LIKE %?1% AND salary > ?2")
+    @Query(nativeQuery = true, value = "SELECT e FROM Employee e WHERE name LIKE %?1% AND salary > ?2 LITMIT 1")
     Employee findFirstByCharAndSalary(String name, int salary);
 
     //3.找出一个薪资最高且公司ID是*的雇员以及该雇员的姓名
+    @Query(nativeQuery = true, value = "SELECT name FROM Employee WHERE companyId = ?1 ORDER BY salary DESC LIMIT 1")
+    String findTopByCompanyIdAndSalary(int companyId);
 
     //4.实现对Employee的分页查询，每页两个数据
 
